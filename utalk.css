@@ -1,0 +1,33 @@
+html {
+  font-size: 10pt;
+  font-family: monospace;
+  background-color: #333;
+  color: lime;
+}
+
+a {
+  color: lime;
+}
+
+input {
+  font-size: 10pt;
+  font-family: monospace;
+  background-color: #333;
+  color: lime;
+  border: 0;
+}
+
+textarea {
+  font-size: 10pt;
+  width: 80em;
+  height: 25em;
+  font-family: monospace;
+  background-color: black;
+  color: lime;
+  border: 0;
+  resize: none;
+}
+
+textarea:focus {
+  outline: none !important;
+}

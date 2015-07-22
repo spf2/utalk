@@ -1,0 +1,68 @@
+<html>
+  <head>
+    <title>Talk</title>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js'></script>
+    <script src='https://cdn.firebase.com/js/client/2.1.0/firebase.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/diff_match_patch/20121119/diff_match_patch.js'></script>
+    <script src='utalk.js'></script>
+    <link href='utalk.css' rel='stylesheet'>
+    <script>
+    var delegate = {
+      start: function() {
+        $('#wait').hide()
+        $('#talk').show()
+        $('#me').focus()
+        $('#alert')[0].play()
+      },
+      finish: function() {
+        $('#talk').hide()
+        $('#wait').show()
+        $('#wait').html("They left.  <a href=''>Host a new chat</a>.")
+      },
+      text: function(text) {
+        $('#them').val(text)
+      },
+      room: function(roomID) {
+        $('#wait').show()
+        var url = "http://utalk.firebaseapp.com/#" + roomID
+        var input = $('<input>').attr({
+          size: url.length,
+          value: url,
+          readonly: true
+        })
+        input.on('click', function() {
+          input.select()
+        })
+        $('#wait').html("Send them here: ")
+        $('#wait').append(input)
+      }
+    }
+    var ref = new Firebase('https://utalk.firebaseio.com')
+    var ut = new Utalk(ref, delegate)
+
+    function transmit() {
+      ut.transmit($('#me').val())
+    }
+
+    function enterOrHost() {
+      if (window.location.hash) {
+        ut.enter(window.location.hash.substr(1))
+      } else {
+        ut.host()
+      }
+    }
+
+    </script>
+  </head>
+
+  <body onload="enterOrHost()">
+    <div id=wait style='display:none;'>
+    </div>
+    <div id=talk style='display:none;'>
+      <textarea id=me onkeyup="transmit()"></textarea>
+      <br>
+      <textarea id=them readonly></textarea>
+    </div>
+    <audio id=alert src="http://soundbible.com/grab.php?id=2063&type=mp3"></audio>
+  </body>
+</html>
